@@ -3,7 +3,7 @@
         <h1 class="title is-4">History:</h1>
             <div class="content has-background-white">
                 <ol type="1">
-                    <li *ngFor="let item of viewHistory">
+                    <li *ngFor="let item of viewHistory.reverse()" (click)="reloadVideo(item)">
                         <a>{{ item }}</a>
                     </li>
                 </ol>

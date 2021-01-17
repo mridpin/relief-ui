@@ -13,7 +13,7 @@ export class VideoViewComponent implements OnInit {
   url : string;
 
   constructor(private dataService : DataService, public sanitizer : DomSanitizer) { 
-    this.url = "https://www.youtube.com/embed/I317BhehZKM";  
+    this.url = "";  
     this.viewUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
   }
 

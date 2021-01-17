@@ -21,6 +21,9 @@ export class HistoryComponent implements OnInit {
     });
   }
 
+  reloadVideo(item : string): void {
+    this.dataService.setUrl(item);
+  }
   // todo: onclick element readd to the history
 
 }
