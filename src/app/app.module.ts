@@ -5,12 +5,14 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { VideoViewComponent } from './video-view/video-view.component';
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SearchBarComponent,
-    VideoViewComponent
+    VideoViewComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

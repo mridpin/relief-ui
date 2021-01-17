@@ -26,9 +26,7 @@ export class SearchBarComponent implements OnInit {
     var url = this.inputUrl.replace("watch?v=", "embed/").split("&")[0];
     this.dataService.setUrl(url);
     console.log(url);
-    // todo: update global var with link
-    // todo: save link to history component
-    // todo: save link to view compionent
+    this.inputUrl = "";
   }
 
 }

@@ -1,0 +1,12 @@
+<nav class="tile is-child box has-background-light">
+    <div class="container">
+        <h1 class="title is-4">History:</h1>
+            <div class="content has-background-white">
+                <ol type="1">
+                    <li *ngFor="let item of viewHistory">
+                        <a>{{ item }}</a>
+                    </li>
+                </ol>
+            </div>
+    </div>
+</nav>
