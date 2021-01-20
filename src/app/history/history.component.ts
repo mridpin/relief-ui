@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
+import {History} from "../interfaces/history";
 
 @Component({
   selector: 'app-history',
@@ -8,7 +9,7 @@ import { DataService } from '../data.service';
 })
 export class HistoryComponent implements OnInit {
 
-  viewHistory : Array<string>;
+  viewHistory : Array<History>;
 
   constructor(private dataService : DataService) { 
     this.viewHistory = new Array();
@@ -17,7 +18,9 @@ export class HistoryComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.currentHistory.subscribe(history => {
       this.viewHistory = history;
-      console.log(this.viewHistory);
+    });
+    this.dataService.getHistory().subscribe(res => {
+      this.viewHistory = res;
     });
   }
 
