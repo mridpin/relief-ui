@@ -13,4 +13,4 @@ This app is the UI app of the Video Viewer web application.
 
 ## Extra features
 1. Button to delete bookmark items
-2. Input form validation.
+2. Input form validation: url must be from youtube, and cannot add duplicated bookmarks
