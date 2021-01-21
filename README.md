@@ -10,3 +10,7 @@ This app is the UI app of the Video Viewer web application.
 2. Install node dependencies with `npm install`
 3. Build Angular app with `ng build`
 4. Run with `ng serve`
+
+## Extra features
+1. Button to delete bookmark items
+2. Input form validation.
