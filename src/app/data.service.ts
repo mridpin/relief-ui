@@ -33,7 +33,10 @@ export class DataService {
   setUrl(newUrl: string) {
     this.urlSource.next(newUrl);
     this.postHistory(newUrl).subscribe(res => {
-
+      this.getHistory().subscribe(res => {
+        this.history = res;
+        this.historySource.next(this.history);
+      });
     });
   }
 
