@@ -4,6 +4,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 
 import {History} from "./interfaces/history";
+import {Bookmark} from "./interfaces/bookmark";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import {History} from "./interfaces/history";
 export class DataService {
 
   private historyUrl : string = "http://localhost:8000/history/";
+  private bookmarkUrl : string = "http://localhost:8000/bookmark/";
 
   private urlSource = new BehaviorSubject<string>("about:blank");
   currentUrl = this.urlSource.asObservable();
@@ -19,8 +21,8 @@ export class DataService {
   private historySource = new BehaviorSubject<Array<History>>([]);
   currentHistory = this.historySource.asObservable();
 
-  bookmarks: Array<string>;
-  private bookmarksSource = new BehaviorSubject<Array<string>>([]);
+  bookmarks: Array<Bookmark>;
+  private bookmarksSource = new BehaviorSubject<Array<Bookmark>>([]);
   currentBookmarks = this.bookmarksSource.asObservable();
 
   constructor(private http: HttpClient) {
@@ -39,14 +41,20 @@ export class DataService {
   }
 
   addUrlToBookmarks(): boolean {
+    var newBookmark : Bookmark = {
+      url: this.urlSource.getValue(),
+    };
     var res: boolean = true;
-    if (this.bookmarks.includes(this.urlSource.getValue())) {
+    // reject bookmark if it exists
+    if (this.bookmarks.some(item => item.url === this.urlSource.getValue())) {
       res = false;
     } else {
-      this.bookmarks.push(this.urlSource.getValue());
-      this.bookmarksSource.next(this.bookmarks);
-      console.log(this.urlSource.getValue());
-      console.log(this.bookmarks);
+      this.postBookmark(newBookmark).subscribe(res => {
+        this.getBookmark().subscribe(res => {
+          this.bookmarks = res;
+          this.bookmarksSource.next(this.bookmarks);
+        });
+      });
     }
     return res;
   }
@@ -60,6 +68,17 @@ export class DataService {
       url: newUrl,
     };
     return this.http.post<History>(this.historyUrl, payload)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  getBookmark() {
+    return this.http.get<Bookmark[]>(this.bookmarkUrl);
+  }
+
+  postBookmark(payload : Bookmark) {
+    return this.http.post<Bookmark>(this.bookmarkUrl, payload)
       .pipe(
         catchError(this.handleError)
       );

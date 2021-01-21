@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
+import {Bookmark} from "../interfaces/bookmark";
 
 @Component({
   selector: 'app-bookmarks',
@@ -8,7 +9,7 @@ import { DataService } from '../data.service';
 })
 export class BookmarksComponent implements OnInit {
 
-  bookmarks: Array<string>;
+  bookmarks: Array<Bookmark>;
 
   constructor(private dataService: DataService) {
     this.bookmarks = new Array();
@@ -17,6 +18,9 @@ export class BookmarksComponent implements OnInit {
   ngOnInit(): void {
     this.dataService.currentBookmarks.subscribe(bookmark => {
       this.bookmarks = bookmark;
+    });
+    this.dataService.getBookmark().subscribe(res => {
+      this.bookmarks = res;
     });
   }
 

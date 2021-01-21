@@ -3,8 +3,8 @@
         <h1 class="title is-4">Bookmarks:</h1>
         <div class="content has-background-white">
             <ol type="1">
-                <li *ngFor="let item of bookmarks" (click)="reloadVideo(item)">
-                    <a>{{ item }}</a>
+                <li *ngFor="let item of bookmarks" (click)="reloadVideo(item.url)">
+                    <a>{{ item.url }}</a>
                 </li>
             </ol>
         </div>
