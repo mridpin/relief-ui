@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
-import {Bookmark} from "../interfaces/bookmark";
+import { Bookmark } from "../interfaces/bookmark";
 
 @Component({
   selector: 'app-bookmarks',
@@ -32,6 +32,10 @@ export class BookmarksComponent implements OnInit {
 
   reloadVideo(item : string): void {
     this.dataService.setUrl(item);
+  }
+
+  deleteBookmark(item : Bookmark): void {
+    this.dataService.removeBookmark(item);
   }
 
 }

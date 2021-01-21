@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
-import {History} from "./interfaces/history";
-import {Bookmark} from "./interfaces/bookmark";
+import { History } from "./interfaces/history";
+import { Bookmark } from "./interfaces/bookmark";
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  private historyUrl : string = "http://localhost:8000/history/";
-  private bookmarkUrl : string = "http://localhost:8000/bookmark/";
+  private historyUrl: string = "http://localhost:8000/history/";
+  private bookmarkUrl: string = "http://localhost:8000/bookmark/";
 
   private urlSource = new BehaviorSubject<string>("about:blank");
   currentUrl = this.urlSource.asObservable();
@@ -33,15 +33,12 @@ export class DataService {
   setUrl(newUrl: string) {
     this.urlSource.next(newUrl);
     this.postHistory(newUrl).subscribe(res => {
-      this.getHistory().subscribe(res => {
-        this.history = res;
-        this.historySource.next(this.history);
-      });
+
     });
   }
 
   addUrlToBookmarks(): boolean {
-    var newBookmark : Bookmark = {
+    var newBookmark: Bookmark = {
       url: this.urlSource.getValue(),
     };
     var res: boolean = true;
@@ -50,21 +47,33 @@ export class DataService {
       res = false;
     } else {
       this.postBookmark(newBookmark).subscribe(res => {
-        this.getBookmark().subscribe(res => {
-          this.bookmarks = res;
-          this.bookmarksSource.next(this.bookmarks);
-        });
+        this.reloadBookmarks();
       });
     }
     return res;
+  }
+
+  reloadBookmarks() {
+    this.getBookmark().subscribe(res => {
+      this.bookmarks = res;
+      this.bookmarksSource.next(this.bookmarks);
+    });
+  }
+
+  removeBookmark(bm: Bookmark): void {
+    this.deleteBookmark(bm).subscribe(res => {
+      this.getHistory().subscribe(res => {
+        this.reloadBookmarks();
+      })
+    })
   }
 
   getHistory() {
     return this.http.get<History[]>(this.historyUrl);
   }
 
-  postHistory(newUrl : string) {
-    var payload : History = {
+  postHistory(newUrl: string) {
+    var payload: History = {
       url: newUrl,
     };
     return this.http.post<History>(this.historyUrl, payload)
@@ -77,8 +86,21 @@ export class DataService {
     return this.http.get<Bookmark[]>(this.bookmarkUrl);
   }
 
-  postBookmark(payload : Bookmark) {
+  postBookmark(payload: Bookmark) {
     return this.http.post<Bookmark>(this.bookmarkUrl, payload)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  deleteBookmark(payload: Bookmark) {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: payload,
+    };
+    return this.http.delete(this.bookmarkUrl, options)
       .pipe(
         catchError(this.handleError)
       );

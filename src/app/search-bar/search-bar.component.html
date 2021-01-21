@@ -3,17 +3,17 @@
         <form>
             <div class="field">
                 <label class="label">Video URL:</label>
+                <p class="is-danger help" *ngIf="!valid">URL format must be "https://www.youtube.com/..."</p>
                 <div class="control">
                     <input class="input" type="text" placeholder="https://www.youtube.com/watch?...." [(ngModel)]="inputUrl"
-                        name="videoUrl">
+                        name="videoUrl" (input)="validateUrl()">
                 </div>
-                <p class="help">URL format not valid</p>
-                <div class="field">
-                    <!--todo: implement validation-->
-                    <div class="control">
-                        <a class="button is-primary" type="text" placeholder="https://www.youtube.com/watch?...."
-                            (click)="fetchVideo()">Fetch</a>
-                    </div>
+            </div>
+            <div class="field">
+                <!--todo: implement validation-->
+                <div class="control">
+                    <button class="button is-primary" type="text" [disabled]="!valid"
+                        (click)="fetchVideo()">Fetch</button>
                 </div>
             </div>
         </form>

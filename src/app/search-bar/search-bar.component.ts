@@ -8,25 +8,29 @@ import { DataService } from '../data.service';
 })
 export class SearchBarComponent implements OnInit {
 
-  public inputUrl : String;
-  url : String;
+  public inputUrl : string;
+  url : string;
+  valid : boolean;
+  regex : RegExp;
 
   constructor(private dataService : DataService) { 
     this.inputUrl = "";
     this.url = "";
+    this.valid = false;
+    this.regex = new RegExp("^https://www.youtube.com/.*");
   }
 
-  ngOnInit(): void {
-    //this.dataService.currentUrl.subscribe(url => this.url = url);
-  }
+  ngOnInit(): void {}
 
   fetchVideo() {
-    // todo: validate input
     // transform to embedded url and clean url from params
     var url = this.inputUrl.replace("watch?v=", "embed/").split("&")[0];
     this.dataService.setUrl(url);
-    console.log(url);
     this.inputUrl = "";
+    this.valid = false;
   }
 
+  validateUrl() {
+    this.valid = this.regex.test(this.inputUrl);
+  }
 }
