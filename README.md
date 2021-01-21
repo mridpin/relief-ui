@@ -4,6 +4,7 @@ This app is the UI app of the Video Viewer web application.
 ## Requirements
 - Angular 8
 - npm
+- ng CLI
 
 ## How to run
 1. Clone the repo
